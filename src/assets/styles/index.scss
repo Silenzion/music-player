@@ -2,8 +2,8 @@
 @import "variables";
 
 body {
-  @apply bg-gray-250 text-gray-600;
-  font-family: sans-serif;
+  @apply bg-gray-300 text-gray-600;
+  font-family: "Raleway", sans-serif;
   letter-spacing: .2rem
 }
 
@@ -70,12 +70,21 @@ button:active {
   }
 
   &-btn {
-
     &_circle {
       @apply rounded-full align-middle;
-width: 40px;
+      width: 40px;
       height: 40px;
     }
+    &_large {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  &-album{
+    @apply w-156 h-156;
+    box-shadow: 2px 2px 7px #cecece, -2px -2px 7px #cecece,
+    -8px -8px 50px #efefef, 3px 3px 25px #efefef;
   }
 }
 
