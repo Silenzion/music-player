@@ -29,6 +29,9 @@ module.exports = {
           350: "#a1a1a1",
           600: "#575F6B",
         },
+        pink: {
+          100: "#F5C2D6",
+        },
       },
 
       borderRadius: {
