@@ -4,7 +4,7 @@ Simple to do list.
 
 Github pages:
 
-[https://silenzion.github.io/TODO-List/](https://silenzion.github.io/TODO-List/)
+[https://silenzion.github.io/music-player/](https://silenzion.github.io/music-player/)
 
 Stack:
 - Vue 3
