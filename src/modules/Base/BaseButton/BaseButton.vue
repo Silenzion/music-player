@@ -45,8 +45,9 @@ const iconClasses = computed<object>(() => {
 
 <style lang="scss">
 .base-button {
-  @apply py-8 px-12 font-bold;
   text-align: center;
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
   transition: 0.2s ease-in-out;
   box-shadow: -6px -6px 14px rgba(255, 255, 255, 0.7), -6px -6px 10px rgba(255, 255, 255, 0.5),
     6px 6px 8px rgba(255, 255, 255, 0.075), 6px 6px 10px rgba(0, 0, 0, 0.15);
@@ -62,7 +63,9 @@ const iconClasses = computed<object>(() => {
   }
 
   &_circle {
-    @apply rounded-full p-0 align-middle;
+    border-radius: $border-radius-full;
+    padding: 0;
+    vertical-align: middle;
   }
 
   &_medium {
@@ -77,11 +80,11 @@ const iconClasses = computed<object>(() => {
   }
 
   &_default {
-    @apply bg-gray-200;
+    background-color: $gray-200;
   }
 
   &_primary {
-    @apply text-pink-100;
+    color: $pink-100;
 
   }
 }
