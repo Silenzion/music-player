@@ -1,5 +1,7 @@
 @import "variables";
-
+:root{
+  font-size: 10px;
+}
 body {
   background-color: $gray-300;
   font-family: "Raleway", sans-serif;
@@ -9,7 +11,7 @@ body {
 
 #app {
   width: 100%;
-  max-width: 800px;
+  max-width: 80rem;
   margin: 0 auto;
 }
 
@@ -30,17 +32,6 @@ button {
   cursor: pointer;
 }
 
-.base{
-  &-card {
-    @apply pt-32 pb-55 px-30 rounded-lg h-full w-full bg-gray-300 text-center;
-    box-shadow: 28px 28px 56px #cecece, -28px -28px 56px #ffffff;
-  }
 
-  &-album{
-    @apply w-156 h-156;
-    box-shadow: 2px 2px 7px #cecece, -2px -2px 7px #cecece,
-    -8px -8px 50px #efefef, 3px 3px 25px #efefef;
-  }
-}
 
 

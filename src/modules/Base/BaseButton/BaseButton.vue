@@ -82,10 +82,7 @@ const iconClasses = computed<object>(() => {
 
   &_primary {
     @apply text-pink-100;
-    //border: 2px solid transparent;
-    //background: linear-gradient(160deg, #f5c2d6 0%, #e4e6eb 100%);
-    //box-shadow: -3px -3px 6px 2px #ffffff, 5px 5px 8px 0px rgba(0, 0, 0, 0.17), 1px 2px 2px 0px rgba(0, 0, 0, 0.1);
-    //transition: 0.1s;
+
   }
 }
 </style>
