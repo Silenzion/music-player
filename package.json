@@ -60,6 +60,7 @@
   "vite": {
     "optimizeDeps": {
       "include": [
+        "pinia",
         "vue"
       ]
     }
