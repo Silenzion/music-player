@@ -21,7 +21,7 @@ const togglePlaying = (): void => {
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
-    <img class="audio-player__album-cover" src="/images/album.jpg" alt=" " loading="lazy" />
+    <img class="audio-player__album-cover" src="./images/album.jpg" alt=" " loading="lazy" />
     <div class="audio-player__artist">Lorem ipsum</div>
     <div class="audio-player__track">Lorem ipsum dolor sit amet</div>
     <div class="audio-player__duration">
