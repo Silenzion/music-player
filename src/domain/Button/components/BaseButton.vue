@@ -41,6 +41,7 @@ const classes = computed<CssClasses>(() => {
   padding: 0.8rem 1.2rem;
   font-weight: 700;
   transition: 0.2s ease-in-out;
+  color: $gray-500;
   box-shadow: -6px -6px 14px rgba(255, 255, 255, 0.7), -6px -6px 10px rgba(255, 255, 255, 0.5),
     6px 6px 8px rgba(255, 255, 255, 0.075), 6px 6px 10px rgba(0, 0, 0, 0.15);
 
