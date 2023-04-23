@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import BaseButton from "@/modules/Base/BaseButton/BaseButton.vue";
+import BaseButton from "@/domain/Button/components/BaseButton.vue";
+import { EIcon } from "@/domain/Icon/Icon.enum";
+import { EButtonSize } from "@/domain/Button/ButtonSize.enum";
 </script>
 <template>
   <div class="audio-player">
@@ -9,12 +11,13 @@ import BaseButton from "@/modules/Base/BaseButton/BaseButton.vue";
     <div class="audio-player__track">Test</div>
     <div class="">Progressbar</div>
     <div class="audio-player__controls">
-      <BaseButton is-circle icon="backward" size="large" />
-      <BaseButton is-circle icon="play" type="primary" size="large" />
-      <BaseButton is-circle icon="forward" size="large" />
+      <BaseButton is-circle :icon="EIcon.BACKWARD" :size="EButtonSize.LARGE" />
+      <BaseButton is-circle :icon="EIcon.PLAY" type="primary" :size="EButtonSize.LARGE" />
+      <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" />
     </div>
   </div>
 </template>
+
 <style lang="scss">
 .audio-player {
   max-width: 41.5rem;
@@ -34,8 +37,8 @@ import BaseButton from "@/modules/Base/BaseButton/BaseButton.vue";
     margin-bottom: 2.4rem;
     text-transform: uppercase;
   }
-  &__artist{
 
+  &__artist {
   }
 
   &__album-cover {
@@ -45,7 +48,7 @@ import BaseButton from "@/modules/Base/BaseButton/BaseButton.vue";
     margin: 0 auto 2.4rem;
     box-shadow: 2px 2px 7px $gray-100, -2px -2px 7px $gray-100, -8px -8px 50px $gray-200, 3px 3px 25px $gray-200;
   }
-  &__controls{
+  &__controls {
     display: flex;
     align-items: center;
     justify-content: center;

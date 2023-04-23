@@ -1,45 +1,37 @@
 <script lang="ts" setup>
 import { computed } from "vue";
-
-enum IconsData {
-  backward = "fas fa-backward",
-  play = "fas fa-play",
-  forward = "fas fa-forward",
-}
-
-type ButtonSize = "small" | "medium" | "large";
-type ButtonType = "primary" | "default";
+import { EButtonSize } from "@/domain/Button/ButtonSize.enum";
+import { EIcon } from "@/domain/Icon/Icon.enum";
+import { CssClasses } from "@/infrastructure/CssClasses.type";
+import { EButtonType } from "@/domain/Button/ButtonType.enum";
 
 const props = withDefaults(
   defineProps<{
     isCircle: boolean;
-    size?: ButtonSize;
-    icon?: string;
+    size?: EButtonSize;
+    icon?: EIcon;
     caption?: string;
-    type?: ButtonType;
+    type?: EButtonType;
   }>(),
   {
     isCircle: false,
-    size: "medium",
-    type: "default",
+    size: EButtonSize.MEDIUM,
+    type: EButtonType.DEFAULT,
+    caption: "",
   }
 );
 
-const classes = computed<object>(() => {
+const classes = computed<CssClasses>(() => {
   return {
     "base-button_circle": props.isCircle,
   };
-});
-
-const iconClasses = computed<object>(() => {
-  return props.icon ? IconsData[props.icon] : {};
 });
 </script>
 
 <template>
   <button type="button" :class="['base-button', `base-button_${size}`, `base-button_${type}`, classes]">
-    <i v-if="icon" :class="iconClasses"></i>
-    <span v-else>{{ caption || "" }}</span>
+    <i v-if="icon" :class="icon" />
+    <span v-if="caption">{{ caption }}</span>
   </button>
 </template>
 
@@ -84,8 +76,8 @@ const iconClasses = computed<object>(() => {
   }
 
   &_primary {
-    color: $pink-100;
-
+    background-color: $pink-100;
+    color: $white-100;
   }
 }
 </style>
