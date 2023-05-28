@@ -6,10 +6,8 @@ import { EButtonType } from "@/domain/Button/ButtonType.enum";
 import { computed, ref, watch } from "vue";
 import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStore.store";
 import { PlaylistConfig } from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
-import { storeToRefs } from "pinia";
 
 const audioPlayerStore = useAudioPlayerStore();
-const { getFormattedProgress, getFormattedDuration } = storeToRefs(audioPlayerStore);
 const player = ref<HTMLAudioElement>();
 const progressSliderValue = ref(0);
 
@@ -37,6 +35,9 @@ const timeUpdateHandler = (): void => {
   }
 };
 
+const inputHandler = (event) => {
+  audioPlayerStore.slideProgress(+event.target?.value);
+};
 watch(
   () => player.value,
   (newVal?: HTMLAudioElement) => {
@@ -52,6 +53,7 @@ watch(
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
+    {{ audioPlayerStore.duration }}
     <img
       class="audio-player__album-cover"
       :src="audioPlayerStore.currentAudio?.cover"
@@ -61,8 +63,8 @@ watch(
     <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
     <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
-      <div class="start">{{ getFormattedProgress }}</div>
-      <div class="end">{{ getFormattedDuration }}</div>
+      <div class="start">{{ audioPlayerStore.getFormattedProgress }}</div>
+      <div class="end">{{ audioPlayerStore.getFormattedDuration }}</div>
     </div>
     <input
       type="range"
@@ -71,7 +73,7 @@ watch(
       min="0"
       max="100"
       class="audio-player__progressbar"
-      @change="audioPlayerStore.slideProgress($event)"
+      @input="inputHandler"
     />
 
     <div class="audio-player__controls">
