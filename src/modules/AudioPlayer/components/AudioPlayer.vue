@@ -3,38 +3,81 @@ import BaseButton from "@/domain/Button/components/BaseButton.vue";
 import { EIcon } from "@/domain/Icon/Icon.enum";
 import { EButtonSize } from "@/domain/Button/ButtonSize.enum";
 import { EButtonType } from "@/domain/Button/ButtonType.enum";
-import { ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStore.store";
 
-// const player = ref<HTMLAudioElement>();
-// const isPlaying = ref<boolean>(false);
+const audioPlayerStore = useAudioPlayerStore();
+const player = ref<HTMLAudioElement>();
+const progressSliderValue = ref(0);
 
-const togglePlaying = (): void => {
-    // isPlaying.value = !isPlaying.value;
-    // if (isPlaying.value) {
-    //   player.value?.play();
-    // } else {
-    //   player.value?.pause();
-    // }
+const formatType = computed<string>(() => {
+  if (audioPlayerStore.currentAudio?.url) {
+    const arr = audioPlayerStore.currentAudio?.url.split(".") || [];
+    const extension = arr[arr.length - 1].toUpperCase();
+    switch (extension) {
+      case "WAV":
+        return "audio/wav";
+      case "MP3":
+        return "audio/mpeg";
+      case "OGG":
+        return "audio/ogg";
+    }
+    return "audio/mpeg";
+  }
+  return "audio/mpeg";
+});
+
+const timeupdateHandler = (): void => {
+  if (player.value) {
+    progressSliderValue.value = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
+    audioPlayerStore.progress = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
+  }
 };
+
+watch(
+  () => player.value,
+  (newVal?: HTMLAudioElement) => {
+    if (newVal) {
+      audioPlayerStore.setPlayer(newVal);
+    }
+  }
+);
 </script>
 
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
     <img class="audio-player__album-cover" src="/images/album-1.jpg" alt=" " loading="lazy" />
-    <div class="audio-player__artist">Lorem ipsum</div>
-    <div class="audio-player__track">Lorem ipsum dolor sit amet</div>
+    <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
+    <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
-      <div class="start">00:01</div>
-      <div class="end">04:30</div>
+      <div class="start">{{ audioPlayerStore.progress }}</div>
+      <div class="end">{{ audioPlayerStore.getFormattedDuration }}</div>
     </div>
-    <input type="range" value="20" min="0" max="100" class="audio-player__progressbar" />
+    <input
+      type="range"
+      aria-label="Прогресс аудио"
+      :value="progressSliderValue"
+      min="0"
+      max="100"
+      class="audio-player__progressbar"
+      @change="audioPlayerStore.slideProgress($event)"
+    />
 
     <div class="audio-player__controls">
       <BaseButton is-circle :icon="EIcon.BACKWARD" :size="EButtonSize.LARGE" />
-      <BaseButton is-circle :icon="EIcon.PLAY" :type="EButtonType.PRIMARY" :size="EButtonSize.LARGE" @click="togglePlaying" />
+      <BaseButton
+        is-circle
+        :icon="EIcon.PLAY"
+        :type="EButtonType.PRIMARY"
+        :size="EButtonSize.LARGE"
+        @click="audioPlayerStore.toggle"
+      />
       <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" />
     </div>
+    <audio ref="player" @timeupdate="timeupdateHandler" @ended="audioPlayerStore.setNext">
+      <source :src="audioPlayerStore.currentAudio?.url" :type="formatType" />
+    </audio>
   </div>
 </template>
 

@@ -1,8 +1,10 @@
+import durationFormatter from "@/infrastructure/DurationFormatter";
 import { IAudioTrack } from "@/modules/AudioPlayer/domain/AudioTrack/IAudioTrack";
 import { IAudioPlayerStoreActions } from "@/modules/AudioPlayer/store/IAudioPlayerStoreActions";
 import { IAudioPlayerStoreGetters } from "@/modules/AudioPlayer/store/IAudioPlayerStoreGetters.interface";
 import { IAudioPlayerStoreState } from "@/modules/AudioPlayer/store/IAudioPlayerStoreState.interface";
 import { defineStore } from "pinia";
+
 
 export const useAudioPlayerStore = defineStore<
   "audioPlayer",
@@ -23,6 +25,9 @@ export const useAudioPlayerStore = defineStore<
     },
     duration: (state: IAudioPlayerStoreState): number => {
       return state.currentAudio?.duration || 0;
+    },
+    getFormattedDuration: (state: IAudioPlayerStoreState): string => {
+      return state.player?.duration ? durationFormatter(Math.floor(state.player.duration)) : "--:--";
     },
   },
   actions: {
