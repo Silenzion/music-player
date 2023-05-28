@@ -2,7 +2,7 @@ export interface IDtoTrack {
   id: number;
   title: string;
   cover: string;
-  artistTile: string;
+  artistTitle: string;
   url: string;
   duration: number;
 }

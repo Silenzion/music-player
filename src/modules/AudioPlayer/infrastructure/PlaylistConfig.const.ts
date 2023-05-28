@@ -1,11 +1,11 @@
-import { IDtoTrack } from "@/modules/AudioPlayer/domain/DtoTrack.interface";
+import { IDtoTrack } from "@/modules/AudioPlayer/domain/Track/DtoTrack.interface";
 import faker from "@faker-js/faker";
 
 export const PlaylistConfig: IDtoTrack[] = [
   {
     id: 1,
     title: faker.name.findName(),
-    artistTile: faker.name.jobTitle(),
+    artistTitle: faker.name.jobTitle(),
     cover: faker.image.imageUrl(),
     url: "/music/1.mp3",
     duration: 4000,
@@ -13,7 +13,7 @@ export const PlaylistConfig: IDtoTrack[] = [
   {
     id: 2,
     title: faker.name.findName(),
-    artistTile: faker.name.jobTitle(),
+    artistTitle: faker.name.jobTitle(),
     cover: faker.image.imageUrl(),
     url: "/music/1.mp3",
     duration: 4000,
