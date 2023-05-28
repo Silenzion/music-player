@@ -60,6 +60,7 @@
   "vite": {
     "optimizeDeps": {
       "include": [
+        "@faker-js/faker",
         "pinia",
         "vue"
       ]

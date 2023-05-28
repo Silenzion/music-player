@@ -23,7 +23,10 @@ export const useAudioPlayerStore = defineStore<
       return state.currentAudio ? state.playlist.indexOf(state.currentAudio) : 0;
     },
     duration: (state: IAudioPlayerStoreState): number => {
-      return state.currentAudio?.duration || 0;
+      return state.currentAudio?.duration || state.player?.duration || 0;
+    },
+    getFormattedProgress: (state: IAudioPlayerStoreState): string => {
+      return state.currentAudio ? durationFormatter(Math.floor(state.progress)) : "--:--";
     },
     getFormattedDuration: (state: IAudioPlayerStoreState): string => {
       return state.player?.duration ? durationFormatter(Math.floor(state.player.duration)) : "--:--";
@@ -45,6 +48,9 @@ export const useAudioPlayerStore = defineStore<
         this.isPlaying = false;
         this.setCurrentAudio(this.playlist.find((item) => item.id === trackId));
       }
+      if (this.player?.paused) {
+        this.player?.play().catch((e: any) => console.log(e));
+      }
       this.isPlaying = true;
     },
     pause(): void {
@@ -53,7 +59,7 @@ export const useAudioPlayerStore = defineStore<
     },
     slideProgress(newValue: number): void {
       if (this.player) {
-        const value = Math.floor(((this.currentAudio?.duration || 0) * +newValue) / 100);
+        const value = Math.floor((this.duration * newValue) / 100);
         this.player.currentTime = value;
         this.progress = value;
       }
@@ -68,7 +74,7 @@ export const useAudioPlayerStore = defineStore<
       if (this.isPlaying) {
         this.pause();
       } else {
-        this.play(this.currentAudio?.id).catch((e: any) => console.log(e));
+        this.play(this.currentAudio?.id);
       }
     },
     async setPrev(): Promise<void> {

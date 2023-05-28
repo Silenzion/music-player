@@ -5,4 +5,5 @@ export interface IAudioPlayerStoreGetters extends _GettersTree<IAudioPlayerStore
   duration: (state: IAudioPlayerStoreState) => number;
   indexCurrentAudio: (state: IAudioPlayerStoreState) => number;
   getFormattedDuration: (state: IAudioPlayerStoreState) => string;
+  getFormattedProgress: (state: IAudioPlayerStoreState) => string;
 }

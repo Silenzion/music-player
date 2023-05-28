@@ -5,9 +5,11 @@ import { EButtonSize } from "@/domain/Button/ButtonSize.enum";
 import { EButtonType } from "@/domain/Button/ButtonType.enum";
 import { computed, ref, watch } from "vue";
 import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStore.store";
-import {PlaylistConfig} from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
+import { PlaylistConfig } from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
+import { storeToRefs } from "pinia";
 
 const audioPlayerStore = useAudioPlayerStore();
+const { getFormattedProgress, getFormattedDuration } = storeToRefs(audioPlayerStore);
 const player = ref<HTMLAudioElement>();
 const progressSliderValue = ref(0);
 
@@ -28,7 +30,7 @@ const formatType = computed<string>(() => {
   return "audio/mpeg";
 });
 
-const timeupdateHandler = (): void => {
+const timeUpdateHandler = (): void => {
   if (player.value) {
     progressSliderValue.value = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
     audioPlayerStore.progress = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
@@ -41,6 +43,7 @@ watch(
     if (newVal) {
       audioPlayerStore.setPlayer(newVal);
       audioPlayerStore.playlist = PlaylistConfig;
+      audioPlayerStore.setCurrentAudio(audioPlayerStore.playlist[0]);
     }
   }
 );
@@ -49,12 +52,17 @@ watch(
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
-    <img class="audio-player__album-cover" src="/images/album-1.jpg" alt=" " loading="lazy" />
+    <img
+      class="audio-player__album-cover"
+      :src="audioPlayerStore.currentAudio?.cover"
+      :alt="audioPlayerStore.currentAudio?.title"
+      loading="lazy"
+    />
     <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
     <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
-      <div class="start">{{ audioPlayerStore.progress }}</div>
-      <div class="end">{{ audioPlayerStore.getFormattedDuration }}</div>
+      <div class="start">{{ getFormattedProgress }}</div>
+      <div class="end">{{ getFormattedDuration }}</div>
     </div>
     <input
       type="range"
@@ -77,7 +85,7 @@ watch(
       />
       <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setNext" />
     </div>
-    <audio ref="player" @timeupdate="timeupdateHandler" @ended="audioPlayerStore.setNext">
+    <audio ref="player" @timeupdate="timeUpdateHandler" @ended="audioPlayerStore.setNext">
       <source :src="audioPlayerStore.currentAudio?.url" :type="formatType" />
     </audio>
   </div>
