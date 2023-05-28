@@ -3,8 +3,9 @@ import BaseButton from "@/domain/Button/components/BaseButton.vue";
 import { EIcon } from "@/domain/Icon/Icon.enum";
 import { EButtonSize } from "@/domain/Button/ButtonSize.enum";
 import { EButtonType } from "@/domain/Button/ButtonType.enum";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStore.store";
+import {PlaylistConfig} from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
 
 const audioPlayerStore = useAudioPlayerStore();
 const player = ref<HTMLAudioElement>();
@@ -39,6 +40,7 @@ watch(
   (newVal?: HTMLAudioElement) => {
     if (newVal) {
       audioPlayerStore.setPlayer(newVal);
+      audioPlayerStore.playlist = PlaylistConfig;
     }
   }
 );
@@ -65,15 +67,15 @@ watch(
     />
 
     <div class="audio-player__controls">
-      <BaseButton is-circle :icon="EIcon.BACKWARD" :size="EButtonSize.LARGE" />
+      <BaseButton is-circle :icon="EIcon.BACKWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setPrev" />
       <BaseButton
         is-circle
-        :icon="EIcon.PLAY"
+        :icon="audioPlayerStore.isPlaying ? EIcon.PAUSE : EIcon.PLAY"
         :type="EButtonType.PRIMARY"
         :size="EButtonSize.LARGE"
         @click="audioPlayerStore.toggle"
       />
-      <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" />
+      <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setNext" />
     </div>
     <audio ref="player" @timeupdate="timeupdateHandler" @ended="audioPlayerStore.setNext">
       <source :src="audioPlayerStore.currentAudio?.url" :type="formatType" />

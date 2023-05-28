@@ -6,7 +6,6 @@ export interface IAudioPlayerStoreActions {
   load(): void;
   toggle(): void;
   slideProgress(newValue: number): void;
-  setCurrentAudioTrack(Track);
+  setCurrentAudio(IAudioTrack): void;
   setPlayer(player: HTMLAudioElement): void;
-  getCurrentPosition(): number;
 }

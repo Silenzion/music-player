@@ -5,7 +5,6 @@ import { IAudioPlayerStoreGetters } from "@/modules/AudioPlayer/store/IAudioPlay
 import { IAudioPlayerStoreState } from "@/modules/AudioPlayer/store/IAudioPlayerStoreState.interface";
 import { defineStore } from "pinia";
 
-
 export const useAudioPlayerStore = defineStore<
   "audioPlayer",
   IAudioPlayerStoreState,
@@ -34,10 +33,7 @@ export const useAudioPlayerStore = defineStore<
     setPlayer(player: HTMLAudioElement): void {
       this.player = player;
     },
-    getCurrentPosition(): number {
-      return this.player ? Math.round(this.player.currentTime * 1000) : 0;
-    },
-    setCurrentAudioTrack(audioTrack?: IAudioTrack): void {
+    setCurrentAudio(audioTrack?: IAudioTrack): void {
       this.currentAudio = audioTrack;
       this.load();
     },
