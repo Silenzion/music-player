@@ -38,10 +38,11 @@ const timeUpdateHandler = (): void => {
 const inputHandler = (event) => {
   audioPlayerStore.slideProgress(+event.target?.value);
 };
+
 watch(
   () => player.value,
   (newVal?: HTMLAudioElement) => {
-    if (newVal) {
+    if (newVal && !audioPlayerStore.player) {
       audioPlayerStore.setPlayer(newVal);
       audioPlayerStore.playlist = PlaylistConfig;
       audioPlayerStore.setCurrentAudio(audioPlayerStore.playlist[0]);
@@ -53,7 +54,6 @@ watch(
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
-    {{ audioPlayerStore.duration }}
     <img
       class="audio-player__album-cover"
       :src="audioPlayerStore.currentAudio?.cover"
