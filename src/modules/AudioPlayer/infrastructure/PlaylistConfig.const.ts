@@ -17,7 +17,7 @@ export const PlaylistConfig: IDtoTrack[] = [
     artistTitle: faker.name.jobTitle(),
     cover: "images/album-2.jpg",
     // cover: faker.image.imageUrl(),
-    url: "music/1.mp3",
+    url: "music/2.mp3",
     duration: 4000,
   },
 ];

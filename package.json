@@ -10,16 +10,24 @@
     "lint:script": "eslint --ext .ts,vue --ignore-path .gitignore --fix src",
     "lint:style": "stylelint src/**/*.{css,scss,vue}",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest --watch",
+    "test:build": "vitest --mode test-build"
   },
   "dependencies": {
+    "@types/jest": "^29.5.2",
     "@types/uuid": "^8.3.4",
+    "@vueuse/core": "9.3.0",
     "axios": "^0.26.1",
     "class-transformer": "^0.5.1",
     "gh-pages": "^4.0.0",
+    "pinia": "2.0.14",
     "uuid": "^8.3.2",
     "vue": "^3.2.31",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "vitest": "0.31.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^6.1.2",
@@ -31,6 +39,7 @@
     "@vitejs/plugin-vue": "^2.2.4",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
+    "@vue/test-utils": "^2.3.2",
     "autoprefixer": "^10.4.2",
     "eslint": "^8.11.0",
     "eslint-config-prettier": "^8.5.0",
@@ -61,6 +70,7 @@
     "optimizeDeps": {
       "include": [
         "@faker-js/faker",
+        "@vueuse/core",
         "pinia",
         "vue"
       ]

@@ -1,4 +1,3 @@
-import durationFormatter from "@/infrastructure/DurationFormatter";
 import { IAudioTrack } from "@/modules/AudioPlayer/domain/AudioTrack/IAudioTrack";
 import { IAudioPlayerStoreActions } from "@/modules/AudioPlayer/store/IAudioPlayerStoreActions";
 import { IAudioPlayerStoreGetters } from "@/modules/AudioPlayer/store/IAudioPlayerStoreGetters.interface";
@@ -51,13 +50,7 @@ export const useAudioPlayerStore = defineStore<
       this.player?.pause();
       this.isPlaying = false;
     },
-    slideProgress(newValue: number): void {
-      if (this.player) {
-        const value = Math.floor((this.duration * +newValue) / 100);
-        this.player.currentTime = value;
-        this.progress = value;
-      }
-    },
+
     load(): void {
       if (this.player) {
         this.player.load();

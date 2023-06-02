@@ -8,10 +8,12 @@ import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStor
 import { PlaylistConfig } from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
 import durationFormatter from "@/infrastructure/DurationFormatter";
 import { UNKNOWN_DURATION_STUB } from "@/modules/AudioPlayer/infrastructure/Stubs.const";
+import { isNumber } from "@vueuse/core";
 
 const audioPlayerStore = useAudioPlayerStore();
 const player = ref<HTMLAudioElement>();
 const progressSliderValue = ref(0);
+const totalDuration = ref(UNKNOWN_DURATION_STUB);
 
 const formatType = computed<string>(() => {
   if (audioPlayerStore.currentAudio?.url) {
@@ -30,26 +32,41 @@ const formatType = computed<string>(() => {
   return "audio/mpeg";
 });
 
+const setTotalDuration = (): void => {
+  totalDuration.value =
+    player.value?.duration && isNumber(player.value?.duration)
+      ? durationFormatter(Math.floor(player.value.duration))
+      : UNKNOWN_DURATION_STUB;
+};
+
 const timeUpdateHandler = (): void => {
-  if (player.value) {
-    progressSliderValue.value = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
-    audioPlayerStore.progress = Math.floor((player.value.currentTime / audioPlayerStore.duration) * 100);
+  if (player.value && isNumber(player.value.duration)) {
+    progressSliderValue.value = Math.floor((player.value.currentTime / player.value.duration) * 100);
+    audioPlayerStore.progress = Math.floor((player.value.currentTime / player.value.duration) * 100);
   }
 };
 
 const inputHandler = (event): void => {
-  audioPlayerStore.slideProgress(+event.target?.value);
+  setTotalDuration();
+  if (player.value) {
+    const value = Math.floor((player.value.duration * +event.target.value) / 100);
+    player.value.currentTime = value;
+    audioPlayerStore.progress = value;
+  }
 };
 
-const getFormattedProgress = (): string => {
-  return audioPlayerStore.currentAudio && player.value?.duration
-    ? durationFormatter(Math.floor(audioPlayerStore.progress))
+const getFormattedProgress = computed<string>(() => {
+  console.log({
+    audio: audioPlayerStore.currentAudio,
+    dur: player.value?.duration,
+    durBool: !!player.value?.duration,
+    durIsNum: isNumber(player.value?.duration),
+    progress: audioPlayerStore.progress,
+  });
+  return audioPlayerStore.currentAudio && isNumber(player.value?.duration)
+    ? durationFormatter(Math.floor(+audioPlayerStore.progress))
     : UNKNOWN_DURATION_STUB;
-};
-
-const getFormattedDuration = (): string => {
-  return player.value?.duration ? durationFormatter(Math.floor(player.value.duration)) : UNKNOWN_DURATION_STUB;
-};
+});
 
 watch(
   () => player.value,
@@ -58,6 +75,7 @@ watch(
       audioPlayerStore.setPlayer(newVal);
       audioPlayerStore.playlist = PlaylistConfig;
       audioPlayerStore.setCurrentAudio(audioPlayerStore.playlist[0]);
+      audioPlayerStore.load();
     }
   }
 );
@@ -75,13 +93,13 @@ watch(
     <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
     <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
-      <div class="start">{{ getFormattedProgress() }}</div>
-      <div class="end">{{ getFormattedDuration() }}</div>
+      <div class="start">{{ getFormattedProgress }}</div>
+      <div class="end">{{ totalDuration }}</div>
     </div>
     <input
       type="range"
       aria-label="Прогресс аудио"
-      :value="progressSliderValue"
+      v-model="progressSliderValue"
       min="0"
       max="100"
       class="audio-player__progressbar"
@@ -99,7 +117,7 @@ watch(
       />
       <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setNext" />
     </div>
-    <audio ref="player" @timeupdate="timeUpdateHandler" @ended="audioPlayerStore.setNext">
+    <audio ref="player" @onloadedmetadata="setTotalDuration" @timeupdate="timeUpdateHandler" @ended="audioPlayerStore.setNext">
       <source :src="audioPlayerStore.currentAudio?.url" :type="formatType" />
     </audio>
   </div>
