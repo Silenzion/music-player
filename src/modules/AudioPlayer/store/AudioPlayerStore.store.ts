@@ -25,12 +25,6 @@ export const useAudioPlayerStore = defineStore<
     duration: (state: IAudioPlayerStoreState): number => {
       return Math.trunc(state.player?.duration || 0);
     },
-    getFormattedProgress: (state: IAudioPlayerStoreState): string => {
-      return state.currentAudio && state.player?.duration ? durationFormatter(Math.floor(state.progress)) : "--:--";
-    },
-    getFormattedDuration: (state: IAudioPlayerStoreState): string => {
-      return state.player?.duration ? durationFormatter(Math.floor(state.player.duration)) : "--:--";
-    },
   },
   actions: {
     setPlayer(player: HTMLAudioElement): void {

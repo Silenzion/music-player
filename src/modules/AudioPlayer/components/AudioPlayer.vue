@@ -6,6 +6,8 @@ import { EButtonType } from "@/domain/Button/ButtonType.enum";
 import { computed, ref, watch } from "vue";
 import { useAudioPlayerStore } from "@/modules/AudioPlayer/store/AudioPlayerStore.store";
 import { PlaylistConfig } from "@/modules/AudioPlayer/infrastructure/PlaylistConfig.const";
+import durationFormatter from "@/infrastructure/DurationFormatter";
+import { UNKNOWN_DURATION_STUB } from "@/modules/AudioPlayer/infrastructure/Stubs.const";
 
 const audioPlayerStore = useAudioPlayerStore();
 const player = ref<HTMLAudioElement>();
@@ -35,8 +37,18 @@ const timeUpdateHandler = (): void => {
   }
 };
 
-const inputHandler = (event) => {
+const inputHandler = (event): void => {
   audioPlayerStore.slideProgress(+event.target?.value);
+};
+
+const getFormattedProgress = (): string => {
+  return audioPlayerStore.currentAudio && player.value?.duration
+    ? durationFormatter(Math.floor(audioPlayerStore.progress))
+    : UNKNOWN_DURATION_STUB;
+};
+
+const getFormattedDuration = (): string => {
+  return player.value?.duration ? durationFormatter(Math.floor(player.value.duration)) : UNKNOWN_DURATION_STUB;
 };
 
 watch(
@@ -63,8 +75,8 @@ watch(
     <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
     <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
-      <div class="start">{{ audioPlayerStore.getFormattedProgress }}</div>
-      <div class="end">{{ audioPlayerStore.getFormattedDuration }}</div>
+      <div class="start">{{ getFormattedProgress() }}</div>
+      <div class="end">{{ getFormattedDuration() }}</div>
     </div>
     <input
       type="range"

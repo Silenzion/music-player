@@ -4,6 +4,4 @@ import { _GettersTree, StateTree } from "pinia";
 export interface IAudioPlayerStoreGetters extends _GettersTree<IAudioPlayerStoreState> {
   duration: (state: IAudioPlayerStoreState) => number;
   indexCurrentAudio: (state: IAudioPlayerStoreState) => number;
-  getFormattedDuration: (state: IAudioPlayerStoreState) => string;
-  getFormattedProgress: (state: IAudioPlayerStoreState) => string;
 }
