@@ -34,7 +34,7 @@ const formatType = computed<string>(() => {
 
 const setTotalDuration = (): void => {
   totalDuration.value =
-    player.value?.duration && player.value?.duration
+    player.value?.duration
       ? durationFormatter(Math.floor(player.value.duration))
       : UNKNOWN_DURATION_STUB;
 };
@@ -44,10 +44,10 @@ const timeUpdateHandler = (): void => {
     progressSliderValue.value = Math.floor((player.value.currentTime / player.value.duration) * 100);
     audioPlayerStore.progress = Math.floor((player.value.currentTime / player.value.duration) * 100);
   }
+  setTotalDuration();
 };
 
 const inputHandler = (event): void => {
-  setTotalDuration();
   if (player.value) {
     const value = Math.floor((player.value.duration * +event.target.value) / 100);
     player.value.currentTime = value;
@@ -56,16 +56,13 @@ const inputHandler = (event): void => {
 };
 
 const getFormattedProgress = computed<string>(() => {
-  console.log({
-    audio: audioPlayerStore.currentAudio,
-    dur: player.value?.duration,
-    durBool: !!player.value?.duration,
-    durIsNum: isNumber(player.value?.duration),
-    progress: audioPlayerStore.progress,
-  });
   return audioPlayerStore.currentAudio && isNumber(player.value?.duration)
     ? durationFormatter(Math.floor(+audioPlayerStore.progress))
     : UNKNOWN_DURATION_STUB;
+});
+
+const styles = computed<string>(() => {
+  return `background-size: ${progressSliderValue.value}% 100%`;
 });
 
 watch(
@@ -77,21 +74,24 @@ watch(
       audioPlayerStore.setCurrentAudio(audioPlayerStore.playlist[0]);
       audioPlayerStore.load();
     }
-  }
+
+  },
 );
+
 </script>
 
 <template>
   <div class="audio-player">
     <div class="audio-player__title">Playing now</div>
     <img
-      class="audio-player__album-cover"
+      :key="audioPlayerStore.currentAudio?.id"
+      class="audio-player__album-cover appear-fade-animation"
       :src="audioPlayerStore.currentAudio?.cover"
       :alt="audioPlayerStore.currentAudio?.title"
       loading="lazy"
     />
-    <div class="audio-player__artist">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
-    <div class="audio-player__track">{{ audioPlayerStore.currentAudio?.title }}</div>
+    <div class="audio-player__artist appear-fade-animation" :key="audioPlayerStore.currentAudio?.id">{{ audioPlayerStore.currentAudio?.artistTitle }}</div>
+    <div class="audio-player__track appear-fade-animation" :key="audioPlayerStore.currentAudio?.id">{{ audioPlayerStore.currentAudio?.title }}</div>
     <div class="audio-player__duration">
       <div class="start">{{ getFormattedProgress }}</div>
       <div class="end">{{ totalDuration }}</div>
@@ -102,6 +102,7 @@ watch(
       aria-label="Прогресс аудио"
       min="0"
       max="100"
+      :style="styles"
       class="audio-player__progressbar"
       @input="inputHandler"
     />
@@ -117,7 +118,7 @@ watch(
       />
       <BaseButton is-circle :icon="EIcon.FORWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setNext" />
     </div>
-    <audio ref="player" @onloadedmetadata="setTotalDuration" @timeupdate="timeUpdateHandler" @ended="audioPlayerStore.setNext">
+    <audio ref="player" @loadedmetadata="setTotalDuration" @timeupdate="timeUpdateHandler" @ended="audioPlayerStore.setNext">
       <source :src="audioPlayerStore.currentAudio?.url" :type="formatType" />
     </audio>
   </div>
@@ -144,11 +145,11 @@ watch(
   }
 
   &__artist {
-    width: 100%;
     font-size: 1.5em;
     text-align: center;
     font-weight: 500;
     opacity: 0.5;
+  //  TODO: добавить clamp
   }
 
   &__track {
@@ -170,25 +171,26 @@ watch(
   &__progressbar {
     width: 80%;
     -webkit-appearance: none;
+    background-color: $gray-170;
     outline: none;
     border: none;
     padding: 0;
     margin-bottom: 40px;
-
-    &::-webkit-slider-runnable-track {
-      background-color: $gray-170;
-      height: 6px;
-      border-radius: 3px;
-    }
+    background-image: linear-gradient($pink-100, $pink-100);
+    background-repeat: no-repeat;
+    background-size: 0 100%;
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none; height: 6px;
 
     &::-webkit-slider-thumb {
-      cursor: pointer;
-      -webkit-appearance: none;
-      border-radius: 100%;
-      background-color: $pink-100;
-      height: 1.8rem;
       width: 1.8rem;
-      margin-top: -0.7rem;
+      height: 1.8rem;
+      background: $pink-100;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: opacity 0.15s;
+      appearance: none;
     }
   }
 

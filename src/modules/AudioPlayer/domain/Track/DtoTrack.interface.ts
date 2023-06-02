@@ -1,5 +1,5 @@
 export interface IDtoTrack {
-  id: number;
+  id: string;
   title: string;
   cover: string;
   artistTitle: string;

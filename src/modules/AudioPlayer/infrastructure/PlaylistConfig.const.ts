@@ -1,9 +1,10 @@
 import { IDtoTrack } from "@/modules/AudioPlayer/domain/Track/DtoTrack.interface";
 import { faker } from '@faker-js/faker';
+import { v4 as uuid } from "uuid";
 
 export const PlaylistConfig: IDtoTrack[] = [
   {
-    id: 1,
+    id: uuid(),
     title: faker.music.songName(),
     artistTitle: `${faker.person.firstName()} ${faker.person.lastName()}`,
     cover: "images/album-1.jpg",
@@ -11,7 +12,7 @@ export const PlaylistConfig: IDtoTrack[] = [
     duration: 4000,
   },
   {
-    id: 2,
+    id:uuid(),
     title: faker.music.songName(),
     artistTitle: `${faker.person.firstName()} ${faker.person.lastName()}`,
     cover: "images/album-2.jpg",

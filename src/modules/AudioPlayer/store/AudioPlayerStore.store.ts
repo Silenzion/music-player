@@ -67,7 +67,11 @@ export const useAudioPlayerStore = defineStore<
     async setPrev(): Promise<void> {
       this.pause();
       if (this.currentAudio) {
-        this.setCurrentAudio(this.playlist[this.indexCurrentAudio - 1]);
+        if (this.indexCurrentAudio === 0) {
+          this.setCurrentAudio(this.playlist[this.playlist.length - 1]);
+        }else{
+          this.setCurrentAudio(this.playlist[this.indexCurrentAudio - 1]);
+        }
       }
       this.load();
       this.play(this.currentAudio?.id);

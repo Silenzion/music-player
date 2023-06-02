@@ -2,7 +2,7 @@ import { IAudioTrack } from "@/modules/AudioPlayer/domain/AudioTrack/IAudioTrack
 import { IDtoTrack } from "@/modules/AudioPlayer/domain/Track/DtoTrack.interface";
 
 export default class Track implements IAudioTrack {
-  id: number;
+  id: string;
   title: string;
   artistTitle: string;
   url: string;
