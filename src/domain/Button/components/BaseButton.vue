@@ -16,8 +16,8 @@ const props = withDefaults(
   {
     isCircle: false,
     size: EButtonSize.MEDIUM,
-    type: EButtonType.DEFAULT,
     caption: "",
+    type: EButtonType.DEFAULT,
   }
 );
 

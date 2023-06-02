@@ -34,13 +34,13 @@ const formatType = computed<string>(() => {
 
 const setTotalDuration = (): void => {
   totalDuration.value =
-    player.value?.duration && isNumber(player.value?.duration)
+    player.value?.duration && player.value?.duration
       ? durationFormatter(Math.floor(player.value.duration))
       : UNKNOWN_DURATION_STUB;
 };
 
 const timeUpdateHandler = (): void => {
-  if (player.value && isNumber(player.value.duration)) {
+  if (player.value && player.value?.duration) {
     progressSliderValue.value = Math.floor((player.value.currentTime / player.value.duration) * 100);
     audioPlayerStore.progress = Math.floor((player.value.currentTime / player.value.duration) * 100);
   }
@@ -98,8 +98,8 @@ watch(
     </div>
     <input
       type="range"
-      aria-label="Прогресс аудио"
       v-model="progressSliderValue"
+      aria-label="Прогресс аудио"
       min="0"
       max="100"
       class="audio-player__progressbar"

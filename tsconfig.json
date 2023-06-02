@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
+    "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "esnext",
     "strict": true,
@@ -19,9 +19,10 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     },
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "types": ["@types/node","vite/client","@types/jest"],
   },
   "include": [
     "src/**/*.js",
@@ -33,5 +34,5 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist", "output"]
 }
