@@ -9,6 +9,7 @@ import { PlaylistConfig } from "@/modules/AudioPlayer/infrastructure/PlaylistCon
 import durationFormatter from "@/infrastructure/DurationFormatter";
 import { UNKNOWN_DURATION_STUB } from "@/modules/AudioPlayer/infrastructure/Stubs.const";
 import { isNumber } from "@vueuse/core";
+import BaseSlider from "@/domain/Slider/components/BaseSlider.vue";
 
 const audioPlayerStore = useAudioPlayerStore();
 const player = ref<HTMLAudioElement>();
@@ -47,7 +48,7 @@ const timeUpdateHandler = (): void => {
   setTotalDuration();
 };
 
-const inputHandler = (event): void => {
+const updateProgressValue = (event): void => {
   if (player.value) {
     const value = Math.floor((player.value.duration * +event.target.value) / 100);
     player.value.currentTime = value;
@@ -61,9 +62,7 @@ const getFormattedProgress = computed<string>(() => {
     : UNKNOWN_DURATION_STUB;
 });
 
-const styles = computed<string>(() => {
-  return `background-size: ${progressSliderValue.value}% 100%`;
-});
+
 
 watch(
   () => player.value,
@@ -96,16 +95,7 @@ watch(
       <div class="start">{{ getFormattedProgress }}</div>
       <div class="end">{{ totalDuration }}</div>
     </div>
-    <input
-      type="range"
-      v-model="progressSliderValue"
-      aria-label="Прогресс аудио"
-      min="0"
-      max="100"
-      :style="styles"
-      class="audio-player__progressbar"
-      @input="inputHandler"
-    />
+    <BaseSlider class="audio-player__progressbar" @update="updateProgressValue" v-model="progressSliderValue"/>
 
     <div class="audio-player__controls">
       <BaseButton is-circle :icon="EIcon.BACKWARD" :size="EButtonSize.LARGE" @click="audioPlayerStore.setPrev" />

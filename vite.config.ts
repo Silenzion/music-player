@@ -10,6 +10,10 @@ import PkgConfig from "vite-plugin-package-config";
 export default defineConfig({
   base: "./",
   plugins: [vue(), OptimizationPersist(), PkgConfig()],
+  test: {
+    globals: true,
+    environment: "jsdom",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
