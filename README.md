@@ -1,6 +1,6 @@
-# TO DO List
+# Music player
 
-Simple to do list. 
+Simple player with mock data. 
 
 Github pages:
 
